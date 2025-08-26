@@ -1,0 +1,11 @@
+C:\Users\16579\Downloads\alrusix-1.0.3 (1)\HPACK_Codec\bin\Debug\net8.0\HPACK_Codec.deps.json
+C:\Users\16579\Downloads\alrusix-1.0.3 (1)\HPACK_Codec\bin\Debug\net8.0\HPACK_Codec.dll
+C:\Users\16579\Downloads\alrusix-1.0.3 (1)\HPACK_Codec\bin\Debug\net8.0\HPACK_Codec.pdb
+C:\Users\16579\Downloads\alrusix-1.0.3 (1)\HPACK_Codec\obj\Debug\net8.0\HPACK_Codec.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\16579\Downloads\alrusix-1.0.3 (1)\HPACK_Codec\obj\Debug\net8.0\HPACK_Codec.AssemblyInfoInputs.cache
+C:\Users\16579\Downloads\alrusix-1.0.3 (1)\HPACK_Codec\obj\Debug\net8.0\HPACK_Codec.AssemblyInfo.cs
+C:\Users\16579\Downloads\alrusix-1.0.3 (1)\HPACK_Codec\obj\Debug\net8.0\HPACK_Codec.csproj.CoreCompileInputs.cache
+C:\Users\16579\Downloads\alrusix-1.0.3 (1)\HPACK_Codec\obj\Debug\net8.0\HPACK_Codec.dll
+C:\Users\16579\Downloads\alrusix-1.0.3 (1)\HPACK_Codec\obj\Debug\net8.0\refint\HPACK_Codec.dll
+C:\Users\16579\Downloads\alrusix-1.0.3 (1)\HPACK_Codec\obj\Debug\net8.0\HPACK_Codec.pdb
+C:\Users\16579\Downloads\alrusix-1.0.3 (1)\HPACK_Codec\obj\Debug\net8.0\ref\HPACK_Codec.dll

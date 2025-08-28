@@ -4,13 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace HPACK_Codec
 {
     public class HPACK_Decode
     {
    
-        public static List<HeaderField> Decode(Span<byte> data, HpackDynamicTable DynamicTable)
+        public static List<HeaderField> Decode(byte[] data, HpackDynamicTable DynamicTable)
         {
             List<HeaderField> headers = new List<HeaderField>();
             int i = 0;
@@ -45,7 +46,7 @@ namespace HPACK_Codec
                 }
                 else
                 {
-                    //Console.WriteLine("没有匹配的字段类型，停止解析");
+                    Log.Error!("没有匹配的字段类型，停止解析");                   
                     break;
                 }
             }
@@ -56,16 +57,14 @@ namespace HPACK_Codec
 
         private static string HuffmanDecode(Span<byte> input)
         {
-            // 1. 初始化变量
+           
             var byteCount = 0; // 用于记录解码后的字节数
                                // 估算输出缓冲区的初始长度，可能需要根据编码因子调整
             var estLength = (input.Length * 3 + 1) / 2;
-            var outBuf = new byte[estLength]; // 创建输出缓冲区
-
-            // 2. 初始化霍夫曼树的根节点
+            var outBuf = new byte[estLength]; 
+        
             var treeNode = HuffmanTree.Root;
-
-            // 3. 循环遍历输入字节
+       
             for (int inputByteOffset = 0; inputByteOffset < input.Length; inputByteOffset++)
             {
                 var bt = input[inputByteOffset]; // 获取当前字节
@@ -89,6 +88,7 @@ namespace HPACK_Codec
                     // 6. 检查当前节点是否有效
                     if (treeNode == null)
                     {
+
                         throw new Exception("无效的霍夫曼编码"); // 抛出异常
                     }
 
@@ -166,11 +166,12 @@ namespace HPACK_Codec
                     var entry = DynamicTable.GetEntry(index - 62);
 
                     headers.Add(new HeaderField(entry.Name, entry.Value, IndexType.Index));
-                    //Console.WriteLine(entry.Name + ":" + entry.Value);
+                    Log.Info!(entry.Name + ":" + entry.Value);
                 }
                 else
                 {
-                    //Console.WriteLine("index:" + index + "动态表为null或动态表索引超出范围"); 
+                   
+                    Log.Error!("index:" + index + "动态表为null或动态表索引超出范围");
                     return 0x1;
                 }
 
@@ -179,7 +180,8 @@ namespace HPACK_Codec
             {
                 var entry = HpackStaticTable.GetEntry(index - 1);
                 headers.Add(new HeaderField(entry.Name, entry.Value, IndexType.Index));
-                //Console.WriteLine(entry.Name + ":" + entry.Value);
+                
+                Log.Info!(entry.Name + ":" + entry.Value);
             }
 
             return 0x0;
@@ -192,7 +194,7 @@ namespace HPACK_Codec
             string value = DecodeNameValuePair(data, ref i, ref name, index, DynamicTable);
             headers.Add(new HeaderField(name, value, IndexType.IndexedName));
             DynamicTable.AddEntry(name, value);
-            //Console.WriteLine(name + ":" + value);
+            Log.Info!(name + ":" + value);
         }
 
         private static void DecodeLiteralWithoutIndexing(Span<byte> data, ref int i, List<HeaderField> headers, HpackDynamicTable DynamicTable, int index)
@@ -201,7 +203,7 @@ namespace HPACK_Codec
             string name = "";
             string value = DecodeNameValuePair(data, ref i, ref name, index, DynamicTable);
             headers.Add(new HeaderField(name, value, IndexType.NoIndexing));
-            //Console.WriteLine(name + ":" + value);
+            Log.Info!(name + ":" + value);
         }
 
         private static void DecodeLiteralNeverIndexed(Span<byte> data, ref int i, List<HeaderField> headers, HpackDynamicTable DynamicTable, int index)
@@ -210,7 +212,7 @@ namespace HPACK_Codec
             string name = "";
             string value = DecodeNameValuePair(data, ref i, ref name, index, DynamicTable);
             headers.Add(new HeaderField(name, value, IndexType.NeverIndexed));
-            //Console.WriteLine(name + ":" + value);
+            Log.Info!(name + ":" + value);
         }
 
         private static string DecodeNameValuePair(Span<byte> data, ref int i, ref string name, int index, HpackDynamicTable DynamicTable)

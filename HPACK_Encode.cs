@@ -10,6 +10,7 @@ namespace HPACK_Codec
 {
 	public class HPACK_Encode
 	{
+
 		/// <summary>
 		/// 编码
 		/// </summary>
@@ -21,8 +22,8 @@ namespace HPACK_Codec
 		/// <returns></returns>
 		public static List<byte> Encode(string name, string value, HpackDynamicTable hpackDynamicTable, bool EnableHuffman = true, IndexType indexType = IndexType.IndexedName)
 		{
-
-			List<int> nameMatches = new List<int>();
+			Log.Info($"编码头部字段: {name}: {value}, 索引类型: {indexType}, 启用霍夫曼编码: {EnableHuffman}");
+            List<int> nameMatches = new List<int>();
 
 			for (int i = 0; i < HpackStaticTable.StaticTable.Length; i++)
 			{
@@ -59,6 +60,7 @@ namespace HPACK_Codec
 				{
 					hpackDynamicTable.AddEntry(name, value);
 				}
+				Log.Info("result：  " + BitConverter.ToString((result.ToArray())));
 				return result;
 			}
 			else
@@ -73,7 +75,8 @@ namespace HPACK_Codec
 				{
 					hpackDynamicTable.AddEntry(name, value);
 				}
-				return result;
+                Log.Info("result：  " + BitConverter.ToString((result.ToArray())));
+                return result;
 			}
 		}
 		/// <summary>
@@ -83,9 +86,9 @@ namespace HPACK_Codec
 		/// <param name="N">可用bit</param>
 		/// <param name="IndexType">前缀</param>
 		/// <returns></returns>
-		public static List<byte> EncodeLen(int length, int N, byte IndexType)
+		private static List<byte> EncodeLen(int length, int N, byte IndexType)
 		{
-			// 初始化结果字节列表
+			
 			List<byte> encodedBytes = new List<byte>();
 
 			// 从第一个字节获取有效位的掩码，并处理第一个字节的数值
@@ -140,7 +143,7 @@ namespace HPACK_Codec
 				}
 				else
 				{
-					Console.WriteLine($"字符 '{c}' 无法被编码：未在霍夫曼编码表中找到对应的编码。");
+					Log.Error!($"字符 '{c}' 无法被编码：未在霍夫曼编码表中找到对应的编码。");
 				}
 			}
 			int paddingBits = (8 - bitStream.Length % 8) % 8;

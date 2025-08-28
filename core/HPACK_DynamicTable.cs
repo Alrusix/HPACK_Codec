@@ -9,7 +9,7 @@ namespace HPACK_Codec.core
 	public class HpackDynamicTable
 	{
 		public List<(string Name, string Value)> _dynamicTable;// 动态表存储头部名称和值的列表
-		private readonly int _maxSize;// 动态表的最大大小
+        public int _maxSize;// 动态表的最大大小
 		private int _currentSize;// 当前动态表的大小
 
 		public HpackDynamicTable(int maxSize = 4096)
@@ -28,7 +28,8 @@ namespace HPACK_Codec.core
 				RemoveOldestEntry();// 移除最旧的条目
 			}
 			_dynamicTable.Insert(0, (name, value)); // 插入新条目
-			_currentSize += entrySize;
+			Log.Info!("添加动态表条目: " + name + ": " + value);
+            _currentSize += entrySize;
 		}
 		// 从动态表中获取条目
 		public (string Name, string Value) GetEntry(int index)
@@ -47,18 +48,30 @@ namespace HPACK_Codec.core
 				var oldestEntry = _dynamicTable[^1];// 获取最后一个条目
 				_currentSize -= oldestEntry.Name.Length + oldestEntry.Value.Length;
 				_dynamicTable.RemoveAt(_dynamicTable.Count - 1);
-			}
+				Log.Info!("移除动态表最老的条目: " + oldestEntry.Name + ": " + oldestEntry.Value);
+            }
 		}
 		// 获取动态表大小
 		public int GetSize() => _dynamicTable.Count;
-		// 获取动态表的总大小
+		
 		public int GetCurrentSize() => _currentSize; // 返回当前动态表的大小
-													 // 清空动态表
+													
 		public void Clear()
 		{
 			_dynamicTable.Clear();
 			_currentSize = 0;
 		}
-	}
+        // 修改动态表大小
+		public void UpdateMaxSize(int newSize)
+		{
+			Log.Info!("新动态表大小："+newSize);
+
+            _maxSize = newSize;
+			while (_currentSize > _maxSize && _dynamicTable.Count > 0)
+			{
+				RemoveOldestEntry();
+			}
+        }
+    }
 
 }
